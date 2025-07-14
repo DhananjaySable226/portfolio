@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for better dark/light mode theming */
+@layer base {
+
+    html,
+    body {
+        @apply h-full;
+    }
+
+    body {
+        @apply transition-colors duration-300;
+    }
+
+    /* Light mode styles */
+    body {
+        @apply bg-white text-gray-900;
+    }
+
+    /* Dark mode styles */
+    body.dark {
+        @apply bg-gray-900 text-white;
+    }
+
+    #root {
+        @apply h-full;
+    }
+}
+
+/* Custom glass effect for both modes */
+@layer components {
+    .bg-glass {
+        @apply bg-white/70 backdrop-blur-lg border border-white/20;
+    }
+
+    .dark .bg-glass {
+        @apply bg-gray-800/70 backdrop-blur-lg border border-gray-700/20;
+    }
+
+    .shadow-glass {
+        @apply shadow-lg shadow-black/10;
+    }
+
+    .dark .shadow-glass {
+        @apply shadow-lg shadow-black/30;
+    }
+}
+
+/* Smooth transitions for theme switching */
+* {
+    @apply transition-colors duration-200;
+}
