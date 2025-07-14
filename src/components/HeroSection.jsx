@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import myImg from '../assets/my-img.png';
 
 const HeroSection = () => (
     <section className="relative flex flex-col md:flex-row items-center justify-center w-full min-h-screen bg-transparent animate-fade px-2 sm:px-4 md:px-16 pt-24 md:pt-32 lg:pt-36">
@@ -30,7 +31,7 @@ const HeroSection = () => (
 
                 {/* Main image with enhanced animations */}
                 <img
-                    src="/src/assets/my-img.png"
+                    src={myImg} 
                     alt="Dhananjay Sable"
                     className="relative w-full h-full aspect-square rounded-full border-4 border-primary/60 dark:border-yellow-400/60 shadow-2xl object-cover bg-white dark:bg-gray-700 group-hover:scale-110 group-hover:rotate-6 transition-all duration-1000 hover:shadow-primary/50 dark:hover:shadow-yellow-400/50 hover:border-primary/90 dark:hover:border-yellow-400/90 animate-glow"
                 />
