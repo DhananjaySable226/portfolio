@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
+import { useLocation } from 'react-router-dom';
 
 // Try different worker configuration for better PDF rendering
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
@@ -9,6 +10,9 @@ const resumeFile = '/dhananjay_sable_resume.pdf'; // Ensure it's in the public/ 
 const ResumeSection = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [numPages, setNumPages] = useState(null);
+
+    const location = useLocation();
+    const isResumePage = location.pathname === '/resume';
 
     const handleDownload = () => {
         const link = document.createElement('a');
@@ -38,7 +42,10 @@ const ResumeSection = () => {
 
     return (
         <>
-            <section className="resume-section w-full py-16 px-4 md:px-16 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-900 rounded-xl animate-fade" id="resume">
+            <section
+                className={`resume-section w-full py-16 px-4 md:px-16 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-900 rounded-xl animate-fade${isResumePage ? ' pt-24 md:pt-32' : ''}`}
+                id="resume"
+            >
                 <div className="max-w-4xl mx-auto text-center">
                     <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
                         Resume

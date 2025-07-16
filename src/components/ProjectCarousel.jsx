@@ -1,46 +1,51 @@
 import React, { useRef, useEffect } from 'react';
 import { FaGithub, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import accounting from '../assets/accounting.png';
+import chat from '../assets/chat.png';
+import hottractor from '../assets/hottractor.jpg';
+import hirehq from '../assets/hirehq3.png';
+import erpCRM from '../assets/erp-crm.png'
 
 const projects = [
     {
         title: 'HireHQ',
         duration: 'December 2024 - Mar 2025',
-        description: 'Smart Hiring & Job Management Platform for Employers and Job Seekers.',
-        image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80',
+        description: 'I worked on HireHQ, a live recruitment platform similar to LinkedIn, designed with three core services: Candidate, ATS (Applicant Tracking System), and Enterprise. The system allowed candidates to build profiles and apply for jobs, recruiters to manage hiring pipelines, and enterprises to post jobs and track hiring insights — all in one centralized application.',
+        image: hirehq,
         github: 'https://github.com/example/ai-chatbot',
         tech: ['TypeScript', 'Node.js', 'Fastify', 'MySQL'],
     },
     {
         title: 'Farm Hub',
         duration: 'September 2024 - November 2024',
-        description: 'Farm Hub 🚜 Tractor & Transport Business Solutions',
-        image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=400&q=80',
+        description: 'I developed a Farm Hub project focused on simplifying the rental system for farm-related vehicles and equipment. The system allowed users to manage rentals, track expenses, calculate profits, and maintain outstanding balances efficiently.',
+        image: hottractor,
         github: 'https://github.com/example/portfolio-website',
         tech: ['React', 'CSS', 'Node.js', 'JavaScript', 'Express', 'MongoDB'],
     },
     {
         title: 'CRM + Commerce',
         duration: 'Jun 2023 - Aug 2023',
-        description: 'A scalable e-commerce platform with payment integration and admin dashboard.',
-        image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
+        description: 'I worked on a CRM-ERP live project that streamlined business operations by integrating customer relationship management with enterprise resource planning. I contributed to modules like lead tracking, inventory management, and sales reporting, enhancing workflow automation and data consistency across departments.',
+        image: erpCRM,
         github: 'https://github.com/example/ecommerce-platform',
         tech: ['TypeScript', 'Node.js', 'postgreSQL', 'Fastify'],
     },
     {
         title: 'Accounting',
         duration: 'Sep 2023 - Oct 2023',
-        description: 'A weather forecasting app using OpenWeatherMap API and React.',
-        image: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80',
+        description: 'I worked on a live accounting project where I was responsible for managing financial data, implementing transaction modules, and generating dynamic reports. This experience helped me strengthen my skills in backend development, data validation, and real-time calculations.',
+        image: accounting,
         github: 'https://github.com/example/weather-app',
-        tech: [ 'JavaScript','Node.js','Express.js','MongoDB'],
+        tech: ['JavaScript', 'Node.js', 'Express.js', 'MongoDB'],
     },
     {
         title: 'Chat Application',
         duration: 'Nov 2023 - Dec 2023',
-        description: 'A productivity tool for managing daily tasks and deadlines.',
-        image: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80',
+        description: 'I created a simple chat application with features like user authentication and one-to-one messaging using REST APIs. The app allowed users to send and receive messages in real-time-like experience by periodically fetching new messages.',
+        image: chat,
         github: 'https://github.com/example/task-manager',
-        tech: ['React', 'JavaScript', 'Node.js', 'Express','MongoDB'],
+        tech: ['React', 'JavaScript', 'Node.js', 'Express', 'MongoDB'],
     },
 ];
 
@@ -56,15 +61,15 @@ const ProjectCarousel = () => {
 
     // Responsive card width: 100%/3 on desktop, 100% on mobile
     return (
-        <section className="project-carousel w-full py-16 px-4 md:px-16 bg-glass dark:bg-gray-800/70 rounded-xl shadow-glass animate-fade">
+        <section id="projects" className="project-carousel w-full py-16 px-4 md:px-16 bg-glass dark:bg-gray-800/70 rounded-xl shadow-glass animate-fade">
             <h2 className="text-3xl font-bold text-primary dark:text-yellow-400 mb-8">Projects</h2>
-            <div className="flex items-center justify-center gap-2">
+            <div className="relative w-full">
                 <button
                     onClick={() => scrollBy(-320)}
-                    className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-primary/20 dark:hover:bg-yellow-400/20 text-primary dark:text-yellow-400 shadow transition-colors duration-200"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-primary/20 dark:hover:bg-yellow-400/20 text-primary dark:text-yellow-400 shadow transition-colors duration-200"
                     aria-label="Scroll left"
                 >
-                    <FaChevronLeft className="w-6 h-6" />
+                    <FaChevronLeft className="w-4 h-4" />
                 </button>
                 <div
                     ref={scrollRef}
@@ -129,10 +134,10 @@ const ProjectCarousel = () => {
                 </div>
                 <button
                     onClick={() => scrollBy(320)}
-                    className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-primary/20 dark:hover:bg-yellow-400/20 text-primary dark:text-yellow-400 shadow transition-colors duration-200"
+                    className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-primary/20 dark:hover:bg-yellow-400/20 text-primary dark:text-yellow-400 shadow transition-colors duration-200"
                     aria-label="Scroll right"
                 >
-                    <FaChevronRight className="w-6 h-6" />
+                    <FaChevronRight className="w-4 h-4" />
                 </button>
             </div>
         </section>

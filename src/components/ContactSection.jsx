@@ -35,6 +35,7 @@ const ContactSection = () => {
         name: '',
         email: '',
         mobile: '',
+        subject: '',
         message: '',
     });
     const [errors, setErrors] = useState({});
@@ -52,6 +53,7 @@ const ContactSection = () => {
         else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(formData.email)) newErrors.email = 'Invalid email address.';
         if (!formData.mobile.trim()) newErrors.mobile = 'Mobile number is required.';
         else if (!/^\d{10,15}$/.test(formData.mobile.replace(/\D/g, ''))) newErrors.mobile = 'Enter a valid mobile number.';
+        if (!formData.subject.trim()) newErrors.subject = 'Subject is required.';
         if (!formData.message.trim()) newErrors.message = 'Message is required.';
         return newErrors;
     };
@@ -78,7 +80,7 @@ const ContactSection = () => {
         )
             .then((result) => {
                 setSuccess('Message sent!');
-                setFormData({ name: '', email: '', mobile: '', message: '' });
+                setFormData({ name: '', email: '', mobile: '', subject: '', message: '' });
                 setErrors({});
                 form.current.reset();
             }, (error) => {
@@ -88,85 +90,267 @@ const ContactSection = () => {
     };
 
     return (
-        <section className="contact-section w-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 py-16 px-4 md:px-16 bg-glass dark:bg-gray-800/70 rounded-xl animate-fade" id="contact">
-            {/* Info (Left) */}
-            <div className="flex flex-col items-center md:items-start w-full md:w-1/3 mb-8 md:mb-0 gap-4">
-                <h2 className="text-3xl font-bold text-primary dark:text-yellow-400 mb-2">Get in Touch</h2>
-                <p className="text-gray-600 dark:text-gray-200 mb-2 max-w-md text-center md:text-left">
-                    I'd love to hear from you! Whether you have a question, a project idea, or just want to say hello — don’t hesitate to reach out. I’m always excited to connect, collaborate, or explore new opportunities. You can contact me via email, phone, or connect with me on social media — let’s make something amazing together!            </p>
-                <div className="flex flex-col gap-2 w-full">
-                    <div className="flex items-center gap-3 text-gray-700 dark:text-yellow-200 p-2 rounded-lg bg-white/50 dark:bg-gray-800/50">
-                        <div className="icon-btn w-10 h-10">
-                            {icons.email}
-                        </div>
-                        <a href={`mailto:${contactInfo.email}`} className="hover:text-primary dark:hover:text-yellow-400 font-medium break-all">{contactInfo.email}</a>
+        // <section className="contact-section w-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 py-16 px-4 md:px-16 bg-glass dark:bg-gray-800/70 rounded-xl animate-fade" id="contact">
+        //     {/* Info (Left) */}
+        //     <div className="flex flex-col items-center md:items-start w-full md:w-1/3 mb-8 md:mb-0 gap-4">
+        //         <h2 className="text-3xl font-bold text-primary dark:text-yellow-400 mb-2">Get in Touch</h2>
+        //         <p className="text-gray-600 dark:text-gray-200 mb-2 max-w-md text-center md:text-left">
+        //             I'd love to hear from you! Whether you have a question, a project idea, or just want to say hello — don’t hesitate to reach out. I’m always excited to connect, collaborate, or explore new opportunities. You can contact me via email, phone, or connect with me on social media — let’s make something amazing together!            </p>
+        //         <div className="flex flex-col gap-2 w-full">
+        //             <div className="flex items-center gap-3 text-gray-700 dark:text-yellow-200 p-2 rounded-lg bg-white/50 dark:bg-gray-800/50">
+        //                 <div className="icon-btn w-10 h-10">
+        //                     {icons.email}
+        //                 </div>
+        //                 <a href={`mailto:${contactInfo.email}`} className="hover:text-primary dark:hover:text-yellow-400 font-medium break-all">{contactInfo.email}</a>
+        //             </div>
+        //             <div className="flex items-center gap-3 text-gray-700 dark:text-yellow-200 p-2 rounded-lg bg-white/50 dark:bg-gray-800/50">
+        //                 <div className="icon-btn w-10 h-10">
+        //                     {icons.phone}
+        //                 </div>
+        //                 <a href={`tel:${contactInfo.phone}`} className="hover:text-primary dark:hover:text-yellow-400 font-medium">{contactInfo.phone}</a>
+        //             </div>
+        //         </div>
+        //         <div className="flex gap-4 mt-2 flex-wrap text-gray-700 dark:text-yellow-200">
+        //             <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className="icon-btn" aria-label="Facebook">{icons.facebook}</a>
+        //             <a href={contactInfo.linkedin} target="_blank" rel="noopener noreferrer" className="icon-btn" aria-label="LinkedIn">{icons.linkedin}</a>
+        //             <a href={contactInfo.github} target="_blank" rel="noopener noreferrer" className="icon-btn" aria-label="GitHub">{icons.github}</a>
+        //             <a href={`mailto:${contactInfo.email}`} className="icon-btn" aria-label="Email">{icons.email}</a>
+        //         </div>
+        //     </div>
+        //     {/* Contact Form (Right) */}
+        //     <form ref={form} onSubmit={sendEmail} className="contact-form w-full md:w-[520px] max-w-2xl bg-white/80 dark:bg-gray-700/80 backdrop-blur-lg rounded-xl p-10 flex flex-col gap-4 shadow-lg border border-gray-200/50 dark:border-gray-600/50">
+        //         <div className="flex flex-col md:flex-row gap-4">
+        //             <div className="flex-1 flex flex-col gap-y-1">
+        //                 <label htmlFor="name" className="font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-1">
+        //                     Name <span className="text-red-500">*</span>
+        //                 </label>
+        //                 <input
+        //                     id="name"
+        //                     type="text"
+        //                     name="name"
+        //                     placeholder="Your Name"
+        //                     value={formData.name}
+        //                     onChange={handleChange}
+        //                     required
+        //                     className={`px-4 py-3 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-yellow-400 border ${errors.name ? 'border-red-500' : 'border-gray-200 dark:border-gray-600'}`}
+        //                 />
+        //                 {errors.name && <span className="text-red-500 text-sm -mt-2">{errors.name}</span>}
+        //             </div>
+        //             <div className="flex-1 flex flex-col gap-y-1">
+        //                 <label htmlFor="mobile" className="font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-1">
+        //                     Mobile <span className="text-red-500">*</span>
+        //                 </label>
+        //                 <input
+        //                     id="mobile"
+        //                     type="tel"
+        //                     name="mobile"
+        //                     placeholder="Mobile Number"
+        //                     value={formData.mobile}
+        //                     onChange={handleChange}
+        //                     required
+        //                     className={`px-4 py-3 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-yellow-400 border ${errors.mobile ? 'border-red-500' : 'border-gray-200 dark:border-gray-600'}`}
+        //                 />
+        //                 {errors.mobile && <span className="text-red-500 text-sm -mt-2">{errors.mobile}</span>}
+        //             </div>
+        //         </div>
+
+        //         <label htmlFor="email" className="font-semibold text-gray-700 dark:text-gray-200 mb-1 flex items-center gap-1">
+        //             Email <span className="text-red-500">*</span>
+        //         </label>
+        //         <input
+        //             id="email"
+        //             type="email"
+        //             name="email"
+        //             placeholder="Your Email"
+        //             value={formData.email}
+        //             onChange={handleChange}
+        //             required
+        //             className={`px-4 py-3 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-yellow-400 border ${errors.email ? 'border-red-500' : 'border-gray-200 dark:border-gray-600'}`}
+        //         />
+        //         {errors.email && <span className="text-red-500 text-sm -mt-2">{errors.email}</span>}
+
+        //         <label htmlFor="subject" className="font-semibold text-gray-700 dark:text-gray-200 mb-1 flex items-center gap-1">
+        //             Subject <span className="text-red-500">*</span>
+        //         </label>
+        //         <input
+        //             id="subject"
+        //             type="text"
+        //             name="subject"
+        //             placeholder="Subject"
+        //             value={formData.subject}
+        //             onChange={handleChange}
+        //             required
+        //             className={`px-4 py-3 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-yellow-400 border ${errors.subject ? 'border-red-500' : 'border-gray-200 dark:border-gray-600'}`}
+        //         />
+        //         {errors.subject && <span className="text-red-500 text-sm -mt-2">{errors.subject}</span>}
+
+        //         <label htmlFor="message" className="font-semibold text-gray-700 dark:text-gray-200 mb-1 flex items-center gap-1">
+        //             Message <span className="text-red-500">*</span>
+        //         </label>
+        //         <textarea
+        //             id="message"
+        //             name="message"
+        //             placeholder="Your Message"
+        //             value={formData.message}
+        //             onChange={handleChange}
+        //             required
+        //             className={`px-4 py-3 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-yellow-400 border ${errors.message ? 'border-red-500' : 'border-gray-200 dark:border-gray-600'} min-h-[120px]`}
+        //         />
+        //         {errors.message && <span className="text-red-500 text-sm -mt-2">{errors.message}</span>}
+        //         <button
+        //             type="submit"
+        //             className="mt-2 px-6 py-3 rounded-full bg-gradient-to-r from-primary to-accent dark:from-yellow-500 dark:to-yellow-700 text-white font-bold shadow-lg hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary/40 dark:focus:ring-yellow-400/40 disabled:opacity-60"
+        //             disabled={sending}
+        //         >
+        //             {sending ? 'Sending...' : 'Send'}
+        //         </button>
+        //         {success && <span className={`text-sm mt-2 ${success.includes('sent') ? 'text-green-600' : 'text-red-500'}`}>{success}</span>}
+        //     </form>
+        // </section>
+
+        <section
+            className="w-full flex flex-col lg:flex-row items-center justify-center gap-10 py-16 px-4 md:px-12 bg-glass dark:bg-gray-800/70 rounded-xl animate-fade"
+            id="contact"
+        >
+            {/* Info Section */}
+            <div className="flex flex-col items-center lg:items-start w-full lg:w-1/2 max-w-lg gap-4">
+                <h2 className="text-3xl font-bold text-primary dark:text-yellow-400">Get in Touch</h2>
+                <p className="text-gray-700 dark:text-gray-200 text-center lg:text-left">
+                    I'd love to hear from you! Whether you have a question, a project idea, or just want to say hello — don’t hesitate to reach out. I’m always excited to connect, collaborate, or explore new opportunities. You can contact me via email, phone, or connect with me on social media — let’s make something amazing together!
+                </p>
+                <div className="flex flex-col gap-3 w-full">
+                    {/* Email */}
+                    <div className="flex items-center gap-3 text-gray-700 dark:text-yellow-200 p-3 rounded-lg bg-white/60 dark:bg-gray-800/60">
+                        {icons.email}
+                        <a href={`mailto:${contactInfo.email}`} className="hover:text-primary dark:hover:text-yellow-400 break-all">
+                            {contactInfo.email}
+                        </a>
                     </div>
-                    <div className="flex items-center gap-3 text-gray-700 dark:text-yellow-200 p-2 rounded-lg bg-white/50 dark:bg-gray-800/50">
-                        <div className="icon-btn w-10 h-10">
-                            {icons.phone}
-                        </div>
-                        <a href={`tel:${contactInfo.phone}`} className="hover:text-primary dark:hover:text-yellow-400 font-medium">{contactInfo.phone}</a>
+                    {/* Phone */}
+                    <div className="flex items-center gap-3 text-gray-700 dark:text-yellow-200 p-3 rounded-lg bg-white/60 dark:bg-gray-800/60">
+                        {icons.phone}
+                        <a href={`tel:${contactInfo.phone}`} className="hover:text-primary dark:hover:text-yellow-400">
+                            {contactInfo.phone}
+                        </a>
                     </div>
                 </div>
-                <div className="flex gap-4 mt-2 flex-wrap text-gray-700 dark:text-yellow-200">
-                    <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className="icon-btn" aria-label="Facebook">{icons.facebook}</a>
-                    <a href={contactInfo.linkedin} target="_blank" rel="noopener noreferrer" className="icon-btn" aria-label="LinkedIn">{icons.linkedin}</a>
-                    <a href={contactInfo.github} target="_blank" rel="noopener noreferrer" className="icon-btn" aria-label="GitHub">{icons.github}</a>
-                    <a href={`mailto:${contactInfo.email}`} className="icon-btn" aria-label="Email">{icons.email}</a>
+
+                {/* Social Icons */}
+                <div className="flex flex-wrap gap-4 mt-4 text-gray-700 dark:text-yellow-200">
+                    <a href={contactInfo.facebook} target="_blank" rel="noreferrer">{icons.facebook}</a>
+                    <a href={contactInfo.linkedin} target="_blank" rel="noreferrer">{icons.linkedin}</a>
+                    <a href={contactInfo.github} target="_blank" rel="noreferrer">{icons.github}</a>
+                    <a href={`mailto:${contactInfo.email}`}>{icons.email}</a>
                 </div>
             </div>
-            {/* Contact Form (Right) */}
-            <form ref={form} onSubmit={sendEmail} className="contact-form w-full md:w-[520px] max-w-2xl bg-white/80 dark:bg-gray-700/80 backdrop-blur-lg rounded-xl p-10 flex flex-col gap-6 shadow-lg border border-gray-200/50 dark:border-gray-600/50">
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Your Name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className={`px-4 py-3 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-yellow-400 border ${errors.name ? 'border-red-500' : 'border-gray-200 dark:border-gray-600'}`}
-                />
-                {errors.name && <span className="text-red-500 text-sm -mt-4">{errors.name}</span>}
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Your Email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className={`px-4 py-3 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-yellow-400 border ${errors.email ? 'border-red-500' : 'border-gray-200 dark:border-gray-600'}`}
-                />
-                {errors.email && <span className="text-red-500 text-sm -mt-4">{errors.email}</span>}
-                <input
-                    type="tel"
-                    name="mobile"
-                    placeholder="Mobile Number"
-                    value={formData.mobile}
-                    onChange={handleChange}
-                    required
-                    className={`px-4 py-3 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-yellow-400 border ${errors.mobile ? 'border-red-500' : 'border-gray-200 dark:border-gray-600'}`}
-                />
-                {errors.mobile && <span className="text-red-500 text-sm -mt-4">{errors.mobile}</span>}
-                <input type="hidden" name="time" value={new Date().toLocaleString()} />
-                <textarea
-                    name="message"
-                    placeholder="Your Message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    className={`px-4 py-3 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-yellow-400 border ${errors.message ? 'border-red-500' : 'border-gray-200 dark:border-gray-600'} min-h-[120px]`}
-                />
-                {errors.message && <span className="text-red-500 text-sm -mt-4">{errors.message}</span>}
+
+            {/* Form Section */}
+            <form
+                ref={form}
+                onSubmit={sendEmail}
+                className="w-full max-w-xl bg-white/80 dark:bg-gray-700/80 rounded-xl p-6 md:p-10 flex flex-col gap-4 shadow-md border border-gray-300/40 dark:border-gray-600/40"
+            >
+                <div className="flex flex-col md:flex-row gap-4">
+                    <div className="flex-1 flex flex-col">
+                        <label htmlFor="name" className="font-semibold text-sm mb-1 text-gray-800 dark:text-gray-100">
+                            Name <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="name"
+                            id="name"
+                            placeholder="Your name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
+                            className={`px-4 py-3 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 ring-primary dark:ring-yellow-400 border ${errors.name ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
+                        />
+                        {errors.name && <span className="text-red-500 text-sm">{errors.name}</span>}
+                    </div>
+                    <div className="flex-1 flex flex-col">
+                        <label htmlFor="mobile" className="font-semibold text-sm mb-1 text-gray-800 dark:text-gray-100">
+                            Mobile <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="tel"
+                            name="mobile"
+                            id="mobile"
+                            placeholder="Mobile number"
+                            value={formData.mobile}
+                            onChange={handleChange}
+                            required
+                            className={`px-4 py-3 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 ring-primary dark:ring-yellow-400 border ${errors.mobile ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
+                        />
+                        {errors.mobile && <span className="text-red-500 text-sm">{errors.mobile}</span>}
+                    </div>
+                </div>
+
+                <div className="flex flex-col">
+                    <label htmlFor="email" className="font-semibold text-sm mb-1 text-gray-800 dark:text-gray-100">
+                        Email <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        placeholder="Email address"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                        className={`px-4 py-3 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 ring-primary dark:ring-yellow-400 border ${errors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
+                    />
+                    {errors.email && <span className="text-red-500 text-sm">{errors.email}</span>}
+                </div>
+
+                <div className="flex flex-col">
+                    <label htmlFor="subject" className="font-semibold text-sm mb-1 text-gray-800 dark:text-gray-100">
+                        Subject <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        name="subject"
+                        id="subject"
+                        placeholder="Subject"
+                        value={formData.subject}
+                        onChange={handleChange}
+                        required
+                        className={`px-4 py-3 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 ring-primary dark:ring-yellow-400 border ${errors.subject ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
+                    />
+                    {errors.subject && <span className="text-red-500 text-sm">{errors.subject}</span>}
+                </div>
+
+                <div className="flex flex-col">
+                    <label htmlFor="message" className="font-semibold text-sm mb-1 text-gray-800 dark:text-gray-100">
+                        Message <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                        name="message"
+                        id="message"
+                        placeholder="Write your message here..."
+                        value={formData.message}
+                        onChange={handleChange}
+                        required
+                        className={`min-h-[120px] px-4 py-3 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 ring-primary dark:ring-yellow-400 border ${errors.message ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
+                    />
+                    {errors.message && <span className="text-red-500 text-sm">{errors.message}</span>}
+                </div>
+
                 <button
                     type="submit"
-                    className="mt-2 px-6 py-3 rounded-full bg-gradient-to-r from-primary to-accent dark:from-yellow-500 dark:to-yellow-700 text-white font-bold shadow-lg hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary/40 dark:focus:ring-yellow-400/40 disabled:opacity-60"
                     disabled={sending}
+                    className="w-full mt-2 px-6 py-3 rounded-full bg-gradient-to-r from-primary to-accent dark:from-yellow-500 dark:to-yellow-700 text-white font-bold shadow hover:scale-105 transition-transform duration-300 focus:outline-none focus:ring-4 focus:ring-primary/40 dark:focus:ring-yellow-400/40"
                 >
-                    {sending ? 'Sending...' : 'Send'}
+                    {sending ? 'Sending...' : 'Send Message'}
                 </button>
-                {success && <span className={`text-sm mt-2 ${success.includes('sent') ? 'text-green-600' : 'text-red-500'}`}>{success}</span>}
+
+                {success && (
+                    <span className={`text-center text-sm mt-2 ${success.includes('sent') ? 'text-green-600' : 'text-red-500'}`}>
+                        {success}
+                    </span>
+                )}
             </form>
-        </section>
+        </section >
+
     );
 };
 
